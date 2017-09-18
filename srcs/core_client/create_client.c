@@ -1,38 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.c                                           :+:      :+:    :+:   */
+/*   create_client.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/09/18 16:39:11 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/09/18 17:18:02 by ddinaut          ###   ########.fr       */
+/*   Created: 2017/09/18 16:39:08 by ddinaut           #+#    #+#             */
+/*   Updated: 2017/09/18 17:18:07 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "client.h"
 
-static int	arg_error(const char *str)
+int		create_client(char **argv, t_cts *cts)
 {
-	ft_putstr_fd("usage: ", 2);
-	ft_putstr_fd(str, 2);
-	ft_putendl_fd(" <address> <port> <message>", 2);
-	return (-1);
-}
-
-int		main(int argc, char **argv)
-{
-	t_cts	cts;
-
-	if (argc < 4)
-		return (arg_error(argv[0]));
-	cts.port = ft_atoi(argv[2]);
-	argv++;
-	init_client(argv, &cts);
-	create_client(argv, &cts);
-
-	/* a tester, erreur de argv++ */
-	write_to_server(cts.sock, argv);
-	close(cts.sock);
+	if ((connect(cts->sock, (const struct sockaddr *)&cts->sin, sizeof(cts->sin))) == -1)
+	{
+		ft_putendl_fd("connect failed : maybe specified port is already in use", 2);
+		return (-1);
+	}
 	return (0);
 }

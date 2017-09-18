@@ -1,38 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.c                                           :+:      :+:    :+:   */
+/*   init_client.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/09/18 16:39:11 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/09/18 17:18:02 by ddinaut          ###   ########.fr       */
+/*   Created: 2017/09/18 17:04:43 by ddinaut           #+#    #+#             */
+/*   Updated: 2017/09/18 17:14:43 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "client.h"
 
-static int	arg_error(const char *str)
+int		init_client(char **argv, t_cts *cts)
 {
-	ft_putstr_fd("usage: ", 2);
-	ft_putstr_fd(str, 2);
-	ft_putendl_fd(" <address> <port> <message>", 2);
-	return (-1);
-}
+	cts->proto = getprotobyname("tcp");
+	if (cts->proto == NULL)
+	{
+		ft_putendl_fd("getprotobyname failed", 2);
+		return (-1);
+	}
 
-int		main(int argc, char **argv)
-{
-	t_cts	cts;
-
-	if (argc < 4)
-		return (arg_error(argv[0]));
-	cts.port = ft_atoi(argv[2]);
+	cts->sock = socket(AF_INET, SOCK_STREAM, cts->proto->p_proto);
+	cts->sin.sin_family = AF_INET;
+	cts->sin.sin_port = htons(cts->port);
+	cts->sin.sin_addr.s_addr = inet_addr(*argv);
 	argv++;
-	init_client(argv, &cts);
-	create_client(argv, &cts);
 
-	/* a tester, erreur de argv++ */
-	write_to_server(cts.sock, argv);
-	close(cts.sock);
 	return (0);
 }
