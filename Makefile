@@ -6,7 +6,7 @@
 #    By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/08/24 11:05:54 by ddinaut           #+#    #+#              #
-#    Updated: 2017/09/18 17:05:55 by ddinaut          ###   ########.fr        #
+#    Updated: 2017/09/19 18:19:17 by ddinaut          ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -28,6 +28,7 @@ INC_PATH	= includes/
 # Sub_dirs #
 DIR_SER		= core_server/
 DIR_CLI		= core_client/
+READLINE = readline/
 
 # Colors #
 BLACK		= \033[1;30m
@@ -48,7 +49,16 @@ INCLUDES	= -I./ -I $(LIB_PATH)/$(INC_PATH) -I $(INC_PATH)
 # Sources #
 SRCS_SER 	= server.c \
 			$(DIR_SER)create_server.c \
-			$(DIR_SER)init_connection.c
+			$(DIR_SER)init_connection.c \
+			$(DIR_SER)received_from_client.c \
+			$(DIR_SER)$(READLINE)add_char.c \
+			$(DIR_SER)$(READLINE)change_term_mode.c \
+			$(DIR_SER)$(READLINE)cursor_move.c \
+			$(DIR_SER)$(READLINE)hist_utils.c \
+			$(DIR_SER)$(READLINE)history.c \
+			$(DIR_SER)$(READLINE)key_delete.c \
+			$(DIR_SER)$(READLINE)match_key.c \
+			$(DIR_SER)$(READLINE)read_line.c
 
 OBJ_SER = $(SRC_SER:$(SRC_PATH)/%.c=$(OBJ_PATH)/%.o)
 SRC_SER = $(addprefix $(SRC_PATH)/,$(SRCS_SER))
@@ -56,7 +66,15 @@ SRC_SER = $(addprefix $(SRC_PATH)/,$(SRCS_SER))
 SRCS_CLI	= client.c \
 			$(DIR_CLI)init_client.c \
 			$(DIR_CLI)create_client.c \
-			$(DIR_CLI)write_to_server.c
+			$(DIR_CLI)write_to_server.c \
+			$(DIR_CLI)$(READLINE)add_char.c \
+			$(DIR_CLI)$(READLINE)change_term_mode.c \
+			$(DIR_CLI)$(READLINE)cursor_move.c \
+			$(DIR_CLI)$(READLINE)hist_utils.c \
+			$(DIR_CLI)$(READLINE)history.c \
+			$(DIR_CLI)$(READLINE)key_delete.c \
+			$(DIR_CLI)$(READLINE)match_key.c \
+			$(DIR_CLI)$(READLINE)read_line.c
 
 OBJ_CLI = $(SRC_CLI:$(SRC_PATH)/%.c=$(OBJ_PATH)/%.o)
 SRC_CLI = $(addprefix $(SRC_PATH)/,$(SRCS_CLI))
