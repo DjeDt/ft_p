@@ -6,7 +6,7 @@
 #    By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/08/24 11:05:54 by ddinaut           #+#    #+#              #
-#    Updated: 2017/09/19 18:19:17 by ddinaut          ###   ########.fr        #
+#    Updated: 2017/09/20 18:22:39 by ddinaut          ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -51,6 +51,8 @@ SRCS_SER 	= server.c \
 			$(DIR_SER)create_server.c \
 			$(DIR_SER)init_connection.c \
 			$(DIR_SER)received_from_client.c \
+			$(DIR_SER)check_user_info.c \
+			$(DIR_SER)user_database.c \
 			$(DIR_SER)$(READLINE)add_char.c \
 			$(DIR_SER)$(READLINE)change_term_mode.c \
 			$(DIR_SER)$(READLINE)cursor_move.c \
@@ -109,11 +111,12 @@ $(OBJ_CLI): $(OBJ_PATH)/%.o : $(SRC_PATH)/%.c
 
 clean:
 	@make -sC $(LIB_PATH) clean
-	@/bin/rm -f $(OBJS_SER)
-	@/bin/rm -f $(OBJS_CLI)
+	@/bin/rm -f $(OBJ_SER)
+	@/bin/rm -f $(OBJ_CLI)
 
 fclean: clean
 	@make -sC $(LIB_PATH) fclean
 	@/bin/rm -f $(SERVEUR) $(CLIENT)
+	@/bin/rm -rf $(OBJ_PATH)
 
 re: fclean all
