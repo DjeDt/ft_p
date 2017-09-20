@@ -6,101 +6,64 @@
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/18 16:47:31 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/09/20 00:48:31 by ddinaut          ###   ########.fr       */
+/*   Updated: 2017/09/20 19:40:38 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "client.h"
 
-
-/* */ /* */ /* */ /* */ /* */ /* */ /* */ /* */ /* */ /* */ /* */ /* */ /* */ /* */ /* */
-/*																					   */
-/*-> faire un handler pour les signaux du server, comme pour les bulidin du minishell  */
-/*																					   */
-/* */ /* */ /* */ /* */ /* */ /* */ /* */ /* */ /* */ /* */ /* */ /* */ /* */ /* */ /* */
-
-/*
-int		username(char **buf, int socket)
+int		login_phase(int socket)
 {
-	ft_putstr("enter username : ");
-	get_next_line(0, buf);
-}
+	int		ret;
+	char	*buf;
+	int		signal;
 
-int		password()
-{
+	ft_putstr("enter username : "); /* begin username phase */
+	get_next_line(0, &buf);
+	send(socket, buf, ft_strlen(buf), 0); /* sending it to the server  */
+	ft_strdel(&buf);
 
-}
+	ret = read(socket, &signal, sizeof(int));
 
-void	init_sig_handler(t_signal sh, char **buf)
-{
-	sh[0].ft =
-}
-
-int		analyze_server_demand(int socket)
-{
-	int			end;
-	t_signal	sig_handler[4];
-
-	init_sig_handler(sig_handler);
-	end = 0;
-	while (1)
+	if (signal == NEED_PASS)
 	{
-
+		ft_putstr("enter password : "); /* Asking for password from user */
+		get_next_line(0, &buf);
+		send(socket, buf, ft_strlen(buf), 0); /* sending it to the server  */
+		ft_strdel(&buf);
+		ret = read(socket, &signal, sizeof(int));
+		if (signal == GREETING)
+			return (1);
+		else if (signal == ERROR)
+			return (-1);
 	}
+	return (0);
 }
-*/
 
 int		send_user_information(int socket)
 {
 	int		ret;
-	char	test[1024];
-	char *buf = NULL;
+	int		signal;
+	char	*buf;
 
-	ret = read(socket, test, 1023);
-	test[ret] = '\0';
-
-	if (ft_strcmp(test, READY) == 0)
+	buf = NULL;
+	ret = read(socket, &signal, sizeof(int));
+	if (signal == READY)
 		ft_putendl("ready response received");
 	else
 	{
-		ft_putendl_fd("no ready answer received", 2);
+		ft_putendl_col_fd("no response from server", 2, RED_COL);
 		return (-1);
 	}
-
-	/* begin username phase */
-	ft_putstr("enter username : ");
-	get_next_line(0, &buf);
-
-	/* sending it to the server  */
-	send(socket, buf, ft_strlen(buf), 0);
-	ft_strdel(&buf);
-
-	/* waiting for password demand */
-	ret = read(socket, test, 1023);
-	test[ret] = '\0';
-
-//	ret = get_next_line(socket, &buf);
-	if (ft_strcmp(test, NEED_PASS) == 0)
-		ft_putendl("need password");
+	if (login_phase(socket) == 1)
+	{
+		ft_putendl_col("connection granted", GREEN_COL);
+		return (1);
+	}
 	else
 	{
-		ft_putendl_fd("no password demand received", 2);
+		ft_putendl_col_fd("wrong username or password", 2, RED_COL);
 		return (-1);
 	}
-
-	ft_putstr("enter password : ");
-	get_next_line(0, &buf);
-
-	/* sending it to the server  */
-	send(socket, buf, ft_strlen(buf), 0);
-	ft_strdel(&buf);
-
-	ret = read(socket, test, 1023);
-	test[ret] = '\0';
-	if (ft_strcmp(test, GREETING) == 0)
-	{
-		ft_putendl("de rien :)");
-	}
-
 	return (0);
 }

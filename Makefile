@@ -6,7 +6,7 @@
 #    By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/08/24 11:05:54 by ddinaut           #+#    #+#              #
-#    Updated: 2017/09/20 18:22:39 by ddinaut          ###   ########.fr        #
+#    Updated: 2017/09/20 19:03:28 by ddinaut          ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -28,7 +28,7 @@ INC_PATH	= includes/
 # Sub_dirs #
 DIR_SER		= core_server/
 DIR_CLI		= core_client/
-READLINE = readline/
+READLINE	= readline/
 
 # Colors #
 BLACK		= \033[1;30m

@@ -6,7 +6,7 @@
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/19 18:16:01 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/09/20 00:49:55 by ddinaut          ###   ########.fr       */
+/*   Updated: 2017/09/20 19:40:16 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,18 +18,12 @@ static int	error(const char *error)
 	return (-1);
 }
 
-void	print_received_data(int oct, char *data)
-{
-	ft_putstr_col("received : ", RED_COL);
-	ft_putstr(data);
-	ft_putstr_col(" octet -> ", GREEN_COL);
-	ft_putnbr(oct);
-	ft_putchar('\n');
-}
-
 int		send_success_signal(const int socket)
 {
-	if ((send(socket, READY, ft_strlen(READY), 0)) == -1)
+	int signal;
+
+	signal = READY;
+	if ((send(socket, &signal, sizeof(int), 0)) == -1)
 	{
 		error("error when sending signal to client");
 		return (-1);
@@ -37,77 +31,57 @@ int		send_success_signal(const int socket)
 	return (0);
 }
 
-int			received_from_client(t_rfc *connect)
+int		storing_user_data(t_user *user, int cs)
+{
+	int ret;
+	int signal;
+
+	signal = 220;
+	/* connection ok, envoi du signal ok et demande du pseudo */
+	if (send_success_signal(cs) != 0)
+		return (-1);
+
+	/* reception de l'user */
+	ret = recv(cs, user->username, 1023, 0);
+	user->username[ret] = '\0';
+
+	/* Demande de mdp */
+	signal = NEED_PASS;
+	send(cs, &signal, sizeof(int), 0);
+
+	/* reception du mdp */
+	ret = recv(cs, user->userpass, 1023, 0);
+	user->userpass[ret] = '\0';
+
+	/* pas utile ici mais c'est toujours mieux */
+	user->next = NULL;
+	return (0);
+}
+
+int		received_from_client(t_rfc *connect)
 {
 	int		ret;
+	int		signal;
 	t_user	user;
 
 	connect->cs = accept(connect->socket, (struct sockaddr *)&connect->csin, &connect->cslen);
 	if (connect->cs == -1)
 		return (error("connection error, try again"));
-
-	/* sending success signal */
-	if (send_success_signal(connect->cs) != 0)
+	if (storing_user_data(&user, connect->cs) == -1)
 		return (-1);
-
-	/* recuperer le username */
-
-	ret = recv(connect->cs, user.username, 1023, 0);
-	if (ret == -1)
+	ret = check_user_info(user);
+	if (ret == 2)
 	{
-		ft_putendl_fd("error with recv", 2);
-		return (-1);
+		signal = GREETING;
+		ft_putendl_col("connection garanted !", LIGHT_BLUE);
+		send(connect->cs, &signal, sizeof(int), 0);
 	}
-	user.username[ret] = '\0';
-
-	ft_putstr("username received is : ");
-	ft_putendl_col(user.username, LIGHT_GREEN);
-
-	/* demander le password */
-	send(connect->cs, NEED_PASS, ft_strlen(NEED_PASS), 0);
-
-	ret = recv(connect->cs, user.userpass, 1023, 0);
-	user.userpass[ret] = '\0';
-
-	ft_putstr("password received is : ");
-	ft_putendl_col(user.userpass, LIGHT_GREEN);
-
-	/* send 220 "merci" response */
-	send(connect->cs, GREETING, ft_strlen(GREETING), 0);
-
-	ft_putendl_col("connection garanted !", LIGHT_BLUE);
-	return (0);
-
-
-
-	/*
-	int		ret;
-	char	buf[1024];
-	pid_t	father;
-
-	ret = 0;
-	while (1)
+	else
 	{
-	connect->cs = accept(connect->socket, (struct sockaddr *)&connect->csin, &connect->cslen);
-		if (connect->cs == -1)
-			return (error("connection error, try again"));
-		if ((father = fork()) == 0)
-		{
-			while ((ret = read(connect->cs, buf, 1023)) > 0)
-			{
-				print_received_data(ret, buf);
-				ft_putendl_fd("data received", connect->cs);
-				if (ft_strcmp(buf, "qserver") == 0)
-				{
-					ft_putendl_fd("break from while", 2);
-					break ;
-				}
-			}
-			close(connect->cs);
-			exit(0);
-		}
+		signal = ERROR;
+		send(connect->cs, &signal, sizeof(int), 0);
 		close(connect->cs);
+		return (-1);
 	}
 	return (0);
-	*/
 }

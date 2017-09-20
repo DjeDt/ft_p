@@ -6,49 +6,39 @@
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/18 15:27:55 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/09/20 00:32:16 by ddinaut          ###   ########.fr       */
+/*   Updated: 2017/09/20 18:17:14 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SERVER_H
 # define SERVER_H
 
-# include "libft.h"
-# include "readline.h"
+# include "main.h"
 
-/* Pour socket() */
-# include <sys/types.h>
-# include <sys/socket.h>
-
-/* pour getprotobyname() */
-# include <netdb.h>
-# include <netinet/in.h>
-
-/* pour htons */
-# include <arpa/inet.h>
-
-/* define signal for communication between client and server */
-# define READY "220"
-# define NEED_PASS "331"
-# define GREETING "230"
-
-typedef	struct	s_rfc
+typedef	struct			s_rfc
 {
 	int					port;
 	int					socket;
 	int					cs;
 	unsigned int		cslen;
 	struct sockaddr_in	csin;
-}				t_rfc;
+}						t_rfc;
 
-typedef struct	s_user
+typedef struct			s_user
 {
-	char	username[1024];
-	char	userpass[1024];
-}				t_user;
+	char				username[1024];
+	char				userpass[1024];
+	struct s_user		*next;
+}						t_user;
+
+# define USR_DTB "/Users/ddinaut/Dev/ft_p/.usr_database"
 
 int		create_server(int port);
 int		init_connection(t_rfc *connect, char **argv);
 int		received_from_client(t_rfc *connect);
+
+int		check_user_info(t_user user);
+t_user	*create_usr_dtb(const char *user, const char *mdp);
+void	add_usr_dtb(t_user **root, const char *usr, const char *mdp);
 
 #endif

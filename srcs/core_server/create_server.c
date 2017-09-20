@@ -6,7 +6,7 @@
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/18 15:38:26 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/09/19 23:33:05 by ddinaut          ###   ########.fr       */
+/*   Updated: 2017/09/20 18:40:54 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ int			create_server(int port)
 	if ((sock = socket(AF_INET, SOCK_STREAM, proto->p_proto)) == -1)
 	{
 		error_proto("error when creating endpoint for communication, trying harder.");
-		/* force a reutiliser l'addresse si socket a pas reussie */
 		setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &val, sizeof(val));
 		if (sock == -1)
 			return (error_proto("error when creating second endpoint for communication, abort"));
