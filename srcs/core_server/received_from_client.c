@@ -6,7 +6,7 @@
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/19 18:16:01 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/09/20 19:40:16 by ddinaut          ###   ########.fr       */
+/*   Updated: 2017/09/20 21:45:42 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,14 @@ static int	error(const char *error)
 	return (-1);
 }
 
-int		send_success_signal(const int socket)
+int		send_signal_to_client(const int socket, int *signal)
 {
-	int signal;
+	int ret;
 
-	signal = READY;
-	if ((send(socket, &signal, sizeof(int), 0)) == -1)
-	{
+	ret = send(socket, signal, sizeof(*signal), 0);
+	if (ret == -1)
 		error("error when sending signal to client");
-		return (-1);
-	}
-	return (0);
+	return (ret);
 }
 
 int		storing_user_data(t_user *user, int cs)
@@ -36,9 +33,9 @@ int		storing_user_data(t_user *user, int cs)
 	int ret;
 	int signal;
 
-	signal = 220;
 	/* connection ok, envoi du signal ok et demande du pseudo */
-	if (send_success_signal(cs) != 0)
+	signal = READY;
+	if (send_signal_to_client(cs, &signal) == -1)
 		return (-1);
 
 	/* reception de l'user */
@@ -47,7 +44,8 @@ int		storing_user_data(t_user *user, int cs)
 
 	/* Demande de mdp */
 	signal = NEED_PASS;
-	send(cs, &signal, sizeof(int), 0);
+	if (send_signal_to_client(cs, &signal) == -1)
+		return (-1);
 
 	/* reception du mdp */
 	ret = recv(cs, user->userpass, 1023, 0);
@@ -64,23 +62,19 @@ int		received_from_client(t_rfc *connect)
 	int		signal;
 	t_user	user;
 
-	connect->cs = accept(connect->socket, (struct sockaddr *)&connect->csin, &connect->cslen);
-	if (connect->cs == -1)
-		return (error("connection error, try again"));
-	if (storing_user_data(&user, connect->cs) == -1)
+	if (storing_user_data(&user, connect->cli_sock) == -1)
 		return (-1);
 	ret = check_user_info(user);
 	if (ret == 2)
 	{
 		signal = GREETING;
+		send_signal_to_client(connect->cli_sock, &signal);
 		ft_putendl_col("connection garanted !", LIGHT_BLUE);
-		send(connect->cs, &signal, sizeof(int), 0);
 	}
 	else
 	{
 		signal = ERROR;
-		send(connect->cs, &signal, sizeof(int), 0);
-		close(connect->cs);
+		send_signal_to_client(connect->cli_sock, &signal);
 		return (-1);
 	}
 	return (0);

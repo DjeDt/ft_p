@@ -6,7 +6,7 @@
 #    By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/08/24 11:05:54 by ddinaut           #+#    #+#              #
-#    Updated: 2017/09/20 19:03:28 by ddinaut          ###   ########.fr        #
+#    Updated: 2017/09/20 21:36:49 by ddinaut          ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -53,6 +53,7 @@ SRCS_SER 	= server.c \
 			$(DIR_SER)received_from_client.c \
 			$(DIR_SER)check_user_info.c \
 			$(DIR_SER)user_database.c \
+			$(DIR_SER)received_connection.c \
 			$(DIR_SER)$(READLINE)add_char.c \
 			$(DIR_SER)$(READLINE)change_term_mode.c \
 			$(DIR_SER)$(READLINE)cursor_move.c \

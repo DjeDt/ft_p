@@ -6,7 +6,7 @@
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/20 15:56:48 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/09/20 18:59:03 by ddinaut          ###   ########.fr       */
+/*   Updated: 2017/09/20 21:01:39 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,11 @@
 #include <fcntl.h>
 
 /* define signal for communication between client and server */
-# define OK		200
-# define READY	220
-# define NEED_PASS 331
-# define GREETING 230
-# define ERROR 425 /* can't open data connection */
+# define OK			200
+# define READY		220
+# define GREETING	230
+# define NEED_PASS	331
+# define ERROR		425 /* can't open data connection */
 
 
 #endif

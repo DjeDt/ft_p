@@ -6,7 +6,7 @@
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/18 15:27:55 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/09/20 18:17:14 by ddinaut          ###   ########.fr       */
+/*   Updated: 2017/09/20 21:36:29 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ typedef	struct			s_rfc
 {
 	int					port;
 	int					socket;
-	int					cs;
-	unsigned int		cslen;
-	struct sockaddr_in	csin;
+	int					cli_sock;
+	unsigned int		cli_sock_len;
+	struct sockaddr_in	cli_sock_in;
 }						t_rfc;
 
 typedef struct			s_user
@@ -36,6 +36,7 @@ typedef struct			s_user
 int		create_server(int port);
 int		init_connection(t_rfc *connect, char **argv);
 int		received_from_client(t_rfc *connect);
+int		waiting_for_client(t_rfc *connect);
 
 int		check_user_info(t_user user);
 t_user	*create_usr_dtb(const char *user, const char *mdp);
