@@ -5,3 +5,6 @@ libft
 
 *.o
 *~
+
+*.dSYM
+.usr_database
