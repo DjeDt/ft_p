@@ -31,7 +31,11 @@ typedef struct			s_user
 	struct s_user		*next;
 }						t_user;
 
-# define USR_DTB "/Users/ddinaut/Dev/ft_p/.usr_database"
+# ifdef __APPLE__
+	# define USR_DTB "/Users/ddinaut/Dev/ft_p/.usr_database"
+# elif __linux
+	# define USR_DTB "/home/dje/Dev/ft_p/.usr_database"
+# endif
 
 int		create_server(int port);
 int		init_connection(t_rfc *connect, char **argv);

@@ -75,7 +75,8 @@ int		received_from_client(t_rfc *connect)
 	{
 		signal = ERROR;
 		send_signal_to_client(connect->cli_sock, &signal);
+		ft_putendl_col_fd("error when looking for user, abort", 2, RED_COL);
 		return (-1);
 	}
-	return (0);
+	return (ret);
 }

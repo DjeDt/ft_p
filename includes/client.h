@@ -15,6 +15,11 @@
 
 # include "main.h"
 
+/* signal to server*/
+# define SEND_CD 1
+# define SEND_LS 2
+
+
 typedef struct	s_cts
 {
 	int					port;
