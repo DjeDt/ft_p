@@ -19,7 +19,7 @@ int		waiting_for_client(t_rfc *connect)
 							   &connect->cli_sock_len);
     if (connect->cli_sock == -1)
 	{
-        ft_putendl_col_fd("connection error, try again", 2, RED_COL);
+		ft_putendl_col_fd("connection error, try again", 2, RED_COL);
 		return (-1);
 	}
 	else

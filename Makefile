@@ -28,7 +28,9 @@ INC_PATH	= includes/
 # Sub_dirs #
 DIR_SER		= core_server/
 DIR_CLI		= core_client/
+CONNECTION	= connection/
 READLINE	= readline/
+BUILTIN		= builtin/
 
 # Colors #
 BLACK		= \033[1;30m
@@ -50,10 +52,11 @@ INCLUDES	= -I./ -I $(LIB_PATH)/$(INC_PATH) -I $(INC_PATH)
 SRCS_SER 	= server.c \
 			$(DIR_SER)create_server.c \
 			$(DIR_SER)init_connection.c \
-			$(DIR_SER)received_from_client.c \
-			$(DIR_SER)check_user_info.c \
-			$(DIR_SER)user_database.c \
 			$(DIR_SER)waiting_for_client.c \
+			$(DIR_SER)$(CONNECTION)received_from_client.c \
+			$(DIR_SER)$(CONNECTION)check_user_info.c \
+			$(DIR_SER)$(CONNECTION)user_database.c \
+\
 			$(DIR_SER)$(READLINE)add_char.c \
 			$(DIR_SER)$(READLINE)change_term_mode.c \
 			$(DIR_SER)$(READLINE)cursor_move.c \
@@ -69,8 +72,13 @@ SRC_SER = $(addprefix $(SRC_PATH)/,$(SRCS_SER))
 SRCS_CLI	= client.c \
 			$(DIR_CLI)init_client.c \
 			$(DIR_CLI)create_client.c \
-			$(DIR_CLI)write_to_server.c \
-			$(DIR_CLI)connect_with_server.c \
+			$(DIR_CLI)handle_input.c \
+\
+			$(DIR_CLI)$(CONNECTION)connect_with_server.c \
+\
+			$(DIR_CLI)$(BUILTIN)ft_ls.c \
+			$(DIR_CLI)$(BUILTIN)ft_cd.c \
+\
 			$(DIR_CLI)$(READLINE)add_char.c \
 			$(DIR_CLI)$(READLINE)change_term_mode.c \
 			$(DIR_CLI)$(READLINE)cursor_move.c \

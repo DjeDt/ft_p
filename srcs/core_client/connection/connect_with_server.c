@@ -55,7 +55,6 @@ int		send_user_information(int socket)
 		ft_putendl_col_fd("error when waiting for ready signal from server", 2, RED_COL);
 		return (-1);
 	}
-	ft_putendl("test1");
 	if (signal == READY)
 		ft_putendl("ready response received");
 	else
@@ -63,7 +62,6 @@ int		send_user_information(int socket)
 		ft_putendl_col_fd("no response from server", 2, RED_COL);
 		return (-1);
 	}
-	ft_putendl("test2");
 	if (login_phase(socket) == 1)
 	{
 		ft_putendl_col("connection granted", GREEN_COL);
@@ -74,6 +72,5 @@ int		send_user_information(int socket)
 		ft_putendl_col_fd("wrong username or password", 2, RED_COL);
 		return (-1);
 	}
-	ft_putendl("Test3");
 	return (0);
 }

@@ -20,35 +20,6 @@ static int	arg_error(const char *str)
 	return (-1);
 }
 
-void		send_command_to_server(int s, char **arg, t_cts *cts)
-{
-	int	ret;
-	int sig;
-
-	sig = s;
-	ret = send(cts->sock, &sig, sizeof(sig), 0);
-	if (ret < 0)
-		ft_putendl_col_fd("error when sending signal to server", 2, RED_COL);
-	(void)arg;
-	(void)cts;
-}
-
-int			manage_input(const char *ipt, t_cts *cts)
-{
-	char	**arg;
-
-	if ((arg = ft_strsplit(ipt, ' ')) == NULL)
-		return (0);
-	if (!arg[0])
-		return (-1);
-	if (ft_strcmp(arg[0], "cd") == 0)
-		send_command_to_server(SEND_CD, arg, cts);
-	else if (ft_strcmp(arg[0], "ls") == 0)
-		send_command_to_server(SEND_LS, arg, cts);
-	ft_arrfree(&arg);
-	return (1);
-}
-
 int			core_client(t_cts *cts)
 {
 	int		ret;
@@ -61,8 +32,7 @@ int			core_client(t_cts *cts)
 	{
 		ft_putendl("$> ");
 		get_next_line(0, &buf);
-
-		manage_input(buf, cts);
+		handle_input(buf, cts);
 		if (ft_strcmp("quit", buf) == 0)
 			ret = 0;
 		ft_strdel(&buf);

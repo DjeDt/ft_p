@@ -30,6 +30,12 @@
 /* Pour open() */
 #include <fcntl.h>
 
+/* builtin sig */
+# define SIG_CD 1
+# define SIG_LS 2
+/* argument sig */
+# define ARG_CMD 11
+
 /* define signal for communication between client and server */
 # define OK			200
 # define READY		220

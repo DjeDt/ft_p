@@ -26,9 +26,9 @@ int		handle_client_demand(int signal, t_rfc *connect)
 
 	(void)connect;
 	ret = 1;
-	if (signal == 1)
+	if (signal == SIG_CD)
 		ft_putendl("cd signal received");
-	else if (signal == 2)
+	else if (signal == SIG_LS)
 		ft_putendl("ls signal received");
 	/*
 	if (ft_strcmp(tmp, "connect") == 0)
