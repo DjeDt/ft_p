@@ -6,7 +6,7 @@
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/18 15:27:55 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/09/20 21:36:29 by ddinaut          ###   ########.fr       */
+/*   Updated: 2017/10/04 19:05:51 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 # define SERVER_H
 
 # include "main.h"
+
+# define PUT_USAGE "usage: put [fichier-local] -> [fichier-distant]\n\
+					[fichier-distant] est optionnel."
 
 typedef	struct			s_rfc
 {
@@ -43,6 +46,13 @@ int		received_from_client(t_rfc *connect);
 int		waiting_for_client(t_rfc *connect);
 int		handle_client_demand(int signal, t_rfc *connect);
 
+/* Builtins */
+int		ft_cd(char **argv, t_rfc *rfc);
+int		ft_ls(char **argv, t_rfc *rfc);
+int		ft_get(char **argv, t_rfc *rfc);
+int		ft_put(char **argv, t_rfc *rfc);
+int		ft_pwd(char **argv, t_rfc *rfc);
+int		ft_quit(char **argv, t_rfc *rfc);
 /* builtin connection */
 int		check_user_info(t_user user);
 t_user	*create_usr_dtb(const char *user, const char *mdp);

@@ -1,21 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_ls.c                                            :+:      :+:    :+:   */
+/*   ft_get.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/10/04 16:18:34 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/10/04 16:18:37 by ddinaut          ###   ########.fr       */
+/*   Created: 2017/10/04 17:16:26 by ddinaut           #+#    #+#             */
+/*   Updated: 2017/10/04 22:03:33 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "client.h"
+#include "server.h"
 
-int		ft_ls(const char *arg, t_cts *cts)
+int		ft_get(char **cmd, t_rfc *rfc)
 {
-	int ret;
-
-	ret = send_command_to_server(SIG_LS, arg, cts);
-	return (ret);
+	(void)cmd;
+	(void)rfc;
+	ft_putendl("fonction get");
+	return (0);
 }

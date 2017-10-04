@@ -6,7 +6,7 @@
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/18 15:28:00 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/09/20 18:20:48 by ddinaut          ###   ########.fr       */
+/*   Updated: 2017/10/04 17:13:34 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,9 @@ int		handle_input(const char *cmd, t_cts *cts);
 int		send_command_to_server(int s, const char *arg, t_cts *cts);
 int		ft_cd(const char *arg, t_cts *cts);
 int		ft_ls(const char *arg, t_cts *cts);
+int		ft_get(const char *arg, t_cts *cts);
+int		ft_put(const char *arg, t_cts *cts);
+int		ft_pwd(const char *arg, t_cts *cts);
+int		ft_quit(const char *arg, t_cts *cts);
 
 #endif

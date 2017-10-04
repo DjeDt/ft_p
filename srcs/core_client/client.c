@@ -6,7 +6,7 @@
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/18 16:39:11 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/09/20 21:53:51 by ddinaut          ###   ########.fr       */
+/*   Updated: 2017/10/04 15:42:27 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,14 @@ int			core_client(t_cts *cts)
 	statut = 1;
 	while (statut)
 	{
-		ft_putendl("$> ");
+		ft_putstr("$> ");
 		get_next_line(0, &buf);
 		handle_input(buf, cts);
 		if (ft_strcmp("quit", buf) == 0)
-			ret = 0;
+		{
+			ft_putendl("see ya");
+			break ;
+		}
 		ft_strdel(&buf);
 	}
 	ft_strdel(&buf);

@@ -1,21 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_ls.c                                            :+:      :+:    :+:   */
+/*   ft_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/10/04 16:18:34 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/10/04 16:18:37 by ddinaut          ###   ########.fr       */
+/*   Created: 2017/10/04 17:19:35 by ddinaut           #+#    #+#             */
+/*   Updated: 2017/10/04 22:04:03 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "client.h"
+#include "server.h"
 
-int		ft_ls(const char *arg, t_cts *cts)
+int		ft_pwd(char **cmd, t_rfc *rfc)
 {
 	int ret;
 
-	ret = send_command_to_server(SIG_LS, arg, cts);
+	(void)rfc;
+	ret = 0;
+	if (!cmd)
+		return (-1);
+	ft_putendl("fonction pwd");
 	return (ret);
 }

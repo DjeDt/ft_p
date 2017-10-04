@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   connect_with_server.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/10/04 19:41:15 by ddinaut           #+#    #+#             */
+/*   Updated: 2017/10/04 21:59:33 by ddinaut          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "client.h"
 
 int		send_answer_to_server(const int socket, char *buf)
@@ -50,7 +62,7 @@ int		send_user_information(int socket)
 {
 	int		signal;
 
-	if (read(socket, &signal, sizeof(int)) == -1)
+	if (recv(socket, &signal, sizeof(int), 0) == -1)
 	{
 		ft_putendl_col_fd("error when waiting for ready signal from server", 2, RED_COL);
 		return (-1);

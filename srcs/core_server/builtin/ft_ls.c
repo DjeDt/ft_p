@@ -5,17 +5,22 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/10/04 16:18:34 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/10/04 16:18:37 by ddinaut          ###   ########.fr       */
+/*   Created: 2017/10/04 14:51:06 by ddinaut           #+#    #+#             */
+/*   Updated: 2017/10/04 22:03:44 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "client.h"
+#include "server.h"
 
-int		ft_ls(const char *arg, t_cts *cts)
+int		ft_ls(char **argv, t_rfc *rfc)
 {
-	int ret;
-
-	ret = send_command_to_server(SIG_LS, arg, cts);
-	return (ret);
+	if (!argv)
+		return (-1);
+	ft_putendl("ls = ");
+	(void)rfc;
+	int count;
+	count = 0;
+	while (argv[count])
+		ft_putendl(argv[count++]);
+	return (0);
 }

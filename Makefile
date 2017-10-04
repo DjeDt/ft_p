@@ -6,7 +6,7 @@
 #    By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/08/24 11:05:54 by ddinaut           #+#    #+#              #
-#    Updated: 2017/09/20 21:36:49 by ddinaut          ###   ########.fr        #
+#    Updated: 2017/10/04 17:18:53 by ddinaut          ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -49,11 +49,19 @@ LIBS		= $(LIBFT) -lft
 INCLUDES	= -I./ -I $(LIB_PATH)/$(INC_PATH) -I $(INC_PATH)
 
 # Sources #
-SRCS_SER 	= server.c \
+SRCS_SER 	= \
+			$(DIR_SER)server.c \
 			$(DIR_SER)create_server.c \
 			$(DIR_SER)init_connection.c \
 			$(DIR_SER)waiting_for_client.c \
 			$(DIR_SER)handle_client_demand.c \
+\
+			$(DIR_SER)$(BUILTIN)ft_cd.c \
+			$(DIR_SER)$(BUILTIN)ft_ls.c \
+			$(DIR_SER)$(BUILTIN)ft_get.c \
+			$(DIR_SER)$(BUILTIN)ft_put.c \
+			$(DIR_SER)$(BUILTIN)ft_pwd.c \
+			$(DIR_SER)$(BUILTIN)ft_quit.c \
 \
 			$(DIR_SER)$(CONNECTION)received_from_client.c \
 			$(DIR_SER)$(CONNECTION)check_user_info.c \
@@ -71,15 +79,20 @@ SRCS_SER 	= server.c \
 OBJ_SER = $(SRC_SER:$(SRC_PATH)/%.c=$(OBJ_PATH)/%.o)
 SRC_SER = $(addprefix $(SRC_PATH)/,$(SRCS_SER))
 
-SRCS_CLI	= client.c \
+SRCS_CLI	= \
+			$(DIR_CLI)client.c \
 			$(DIR_CLI)init_client.c \
 			$(DIR_CLI)create_client.c \
 			$(DIR_CLI)handle_input.c \
 \
-			$(DIR_CLI)$(CONNECTION)connect_with_server.c \
-\
 			$(DIR_CLI)$(BUILTIN)ft_ls.c \
 			$(DIR_CLI)$(BUILTIN)ft_cd.c \
+			$(DIR_CLI)$(BUILTIN)ft_get.c \
+			$(DIR_CLI)$(BUILTIN)ft_put.c \
+			$(DIR_CLI)$(BUILTIN)ft_pwd.c \
+			$(DIR_CLI)$(BUILTIN)ft_quit.c \
+\
+			$(DIR_CLI)$(CONNECTION)connect_with_server.c \
 \
 			$(DIR_CLI)$(READLINE)add_char.c \
 			$(DIR_CLI)$(READLINE)change_term_mode.c \
