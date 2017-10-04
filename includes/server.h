@@ -41,7 +41,9 @@ int		create_server(int port);
 int		init_connection(t_rfc *connect, char **argv);
 int		received_from_client(t_rfc *connect);
 int		waiting_for_client(t_rfc *connect);
+int		handle_client_demand(int signal, t_rfc *connect);
 
+/* builtin connection */
 int		check_user_info(t_user user);
 t_user	*create_usr_dtb(const char *user, const char *mdp);
 void	add_usr_dtb(t_user **root, const char *usr, const char *mdp);

@@ -30,7 +30,7 @@ typedef struct	s_cts
 typedef struct		s_builtin
 {
 	const char		*ft;
-	int				(*fc)(char *, t_cts *cts);
+	int				(*func)(const char *cmd, t_cts *cts);
 }					t_builtin;
 
 typedef struct	s_signal
@@ -45,8 +45,8 @@ int		send_user_information(int socket);
 
 int		handle_input(const char *cmd, t_cts *cts);
 
-int		send_command_to_server(int s, char *arg, t_cts *cts);
-int		ft_cd(char *arg, t_cts *cts);
-int		ft_ls(char *arg, t_cts *cts);
+int		send_command_to_server(int s, const char *arg, t_cts *cts);
+int		ft_cd(const char *arg, t_cts *cts);
+int		ft_ls(const char *arg, t_cts *cts);
 
 #endif

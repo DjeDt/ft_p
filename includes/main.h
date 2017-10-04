@@ -33,6 +33,7 @@
 /* builtin sig */
 # define SIG_CD 1
 # define SIG_LS 2
+# define SIG_CONNECT 3
 /* argument sig */
 # define ARG_CMD 11
 

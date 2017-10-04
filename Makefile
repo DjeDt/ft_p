@@ -53,6 +53,8 @@ SRCS_SER 	= server.c \
 			$(DIR_SER)create_server.c \
 			$(DIR_SER)init_connection.c \
 			$(DIR_SER)waiting_for_client.c \
+			$(DIR_SER)handle_client_demand.c \
+\
 			$(DIR_SER)$(CONNECTION)received_from_client.c \
 			$(DIR_SER)$(CONNECTION)check_user_info.c \
 			$(DIR_SER)$(CONNECTION)user_database.c \

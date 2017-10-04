@@ -20,27 +20,6 @@ static int	arg_error(const char *str)
 	return (-1);
 }
 
-int		handle_client_demand(int signal, t_rfc *connect)
-{
-	int ret;
-
-	(void)connect;
-	ret = 1;
-	if (signal == SIG_CD)
-		ft_putendl("cd signal received");
-	else if (signal == SIG_LS)
-		ft_putendl("ls signal received");
-	/*
-	if (ft_strcmp(tmp, "connect") == 0)
-	{
-		ft_putendl("client asking for connection");
-		ret = received_from_client(connect);
-	}
-	*/
-
-	return (ret);
-}
-
 int			do_something(t_rfc *connect)
 {
 	int		statut;
