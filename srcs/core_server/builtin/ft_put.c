@@ -30,6 +30,7 @@ int			ft_put(char **cmd, t_rfc *rfc)
 
 	sig = READY;
 	fd = create_file(cmd[1]);
+	(void)fd;
 	send(rfc->cli_sock, &sig, sizeof(sig), 0);
 	ret = 0;
 	return (ret);

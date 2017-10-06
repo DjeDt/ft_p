@@ -39,7 +39,7 @@ typedef struct	s_signal
 	int			(*func)(char *buf, int socket);
 }				t_signal;
 
-int		init_client(char **argv, t_cts *cts);
+int		init_client(char **argv, t_cts *client_pi, t_cts *client_dtp);
 int		create_client(t_cts *cts);
 int		send_user_information(int socket);
 

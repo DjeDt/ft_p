@@ -46,20 +46,21 @@ int			core_client(t_cts *cts)
 
 int			main(int argc, char **argv)
 {
-	t_cts	cts;
+	t_cts	client_pi;
+	t_cts	client_dtp;
 
 	if (argc != 3)
 		return (arg_error(argv[0]));
-	cts.port = ft_atoi(argv[2]);
-	if (init_client(argv, &cts) == -1)
+	client_pi.port = ft_atoi(argv[2]);
+	if (init_client(argv, &client_pi, &client_dtp) == -1)
 		return (-1);
-	if (create_client(&cts) == -1)
+	if (create_client(&client_pi) == -1)
 		return (-1);
 
-	core_client(&cts);
+	core_client(&client_pi);
 
 //	send_user_information(cts.sock);
 
-	close(cts.sock);
+	close(client_pi.sock);
 	return (0);
 }

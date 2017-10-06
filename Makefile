@@ -52,7 +52,7 @@ INCLUDES	= -I./ -I $(LIB_PATH)/$(INC_PATH) -I $(INC_PATH)
 SRCS_SER 	= \
 			$(DIR_SER)server.c \
 			$(DIR_SER)create_server.c \
-			$(DIR_SER)init_connection.c \
+			$(DIR_SER)init_server.c \
 			$(DIR_SER)waiting_for_client.c \
 			$(DIR_SER)handle_client_demand.c \
 \
@@ -62,19 +62,9 @@ SRCS_SER 	= \
 			$(DIR_SER)$(BUILTIN)ft_put.c \
 			$(DIR_SER)$(BUILTIN)ft_pwd.c \
 			$(DIR_SER)$(BUILTIN)ft_quit.c \
-\
-			$(DIR_SER)$(CONNECTION)received_from_client.c \
-			$(DIR_SER)$(CONNECTION)check_user_info.c \
-			$(DIR_SER)$(CONNECTION)user_database.c \
-\
-			$(DIR_SER)$(READLINE)add_char.c \
-			$(DIR_SER)$(READLINE)change_term_mode.c \
-			$(DIR_SER)$(READLINE)cursor_move.c \
-			$(DIR_SER)$(READLINE)hist_utils.c \
-			$(DIR_SER)$(READLINE)history.c \
-			$(DIR_SER)$(READLINE)key_delete.c \
-			$(DIR_SER)$(READLINE)match_key.c \
-			$(DIR_SER)$(READLINE)read_line.c
+			$(DIR_SER)$(BUILTIN)$(CONNECTION)received_from_client.c \
+			$(DIR_SER)$(BUILTIN)$(CONNECTION)check_user_info.c \
+			$(DIR_SER)$(BUILTIN)$(CONNECTION)user_database.c \
 
 OBJ_SER = $(SRC_SER:$(SRC_PATH)/%.c=$(OBJ_PATH)/%.o)
 SRC_SER = $(addprefix $(SRC_PATH)/,$(SRCS_SER))

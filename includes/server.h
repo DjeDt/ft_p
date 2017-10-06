@@ -40,11 +40,12 @@ typedef struct			s_user
 	# define USR_DTB "/home/dje/Dev/ft_p/.usr_database"
 # endif
 
-int		create_server(int port);
-int		init_connection(t_rfc *connect, char **argv);
-int		received_from_client(t_rfc *connect);
-int		waiting_for_client(t_rfc *connect);
-int		handle_client_demand(int signal, t_rfc *connect);
+int		init_connection_server(t_rfc *server_pi, t_rfc *server_dtp, char **argv);
+int		received_from_client(t_rfc *server_pi);
+int		waiting_for_client(t_rfc *server_pi, t_rfc *server_dtp);
+int		handle_client_demand(int signal, t_rfc *server_pi, t_rfc *server_dtp);
+
+/* Creating server */
 
 /* Builtins */
 int		ft_cd(char **argv, t_rfc *rfc);

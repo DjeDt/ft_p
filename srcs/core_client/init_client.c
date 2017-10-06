@@ -18,26 +18,35 @@ static int	error_proto(const char *error)
 	return (-1);
 }
 
-int			init_client(char **argv, t_cts *cts)
+static int	get_socket(struct protoent *proto)
 {
-	int val;
+	int	val;
+	int sock;
 
-	val = 1;
-	argv++;
-	if ((cts->proto = getprotobyname("tcp")) == NULL)
-		return (error_proto("error when searching for protocol. fatal error"));
-	if ((cts->sock = socket(AF_INET, SOCK_STREAM, cts->proto->p_proto)) == -1)
+	sock = socket(AF_INET, SOCK_STREAM, proto->p_proto);
+	if (sock == -1)
 	{
+		val = 1;
 		error_proto("error when creating endpoint for communication, trying harder");
 		/* force a reutiliser l'addresse si socket a pas reussie */
-		setsockopt(cts->sock, SOL_SOCKET, SO_REUSEADDR, &val, sizeof(val));
-		if (cts->sock == -1)
+		setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &val, sizeof(val));
+		if (sock == -1)
 			return (error_proto("error when creating second endpoint for communication, abort"));
 	}
-	cts->sin.sin_family = AF_INET;
-	cts->sin.sin_port = htons(cts->port);
-	cts->sin.sin_addr.s_addr = inet_addr(*argv);
-	if ((int)cts->sin.sin_addr.s_addr == -1)
+	return (sock);
+}
+
+int			init_client(char **argv, t_cts *client_pi, t_cts *client_dtp)
+{
+	if ((client_pi->proto = getprotobyname("tcp")) == NULL)
+		return (error_proto("error when searching for protocol. fatal error"));
+	client_pi->sock = get_socket(client_pi->proto);
+	client_pi->sin.sin_family = AF_INET;
+	client_pi->sin.sin_port = htons(client_pi->port);
+	if (!(client_pi->sin.sin_addr.s_addr = inet_addr(argv[1])))
 		return (error_proto("address not recognized: abort."));
+	client_dtp->port = client_pi->port + 1;
+	client_dtp->proto = getprotobyname("tcp");
+	client_dtp->sock = get_socket(client_dtp->proto);
 	return (0);
 }

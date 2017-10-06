@@ -33,6 +33,10 @@
 /* pour les variables en 64b */
 # include <stdint.h>
 
+/*
+  struct from rfc 956
+ */
+
 /* builtin sig */
 # define SIG_CD 1
 # define SIG_LS 2

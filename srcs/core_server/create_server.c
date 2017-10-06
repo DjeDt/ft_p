@@ -31,13 +31,10 @@ int			socket_connection(struct protoent *proto)
 		if (sock == -1)
 			return (error_proto("error when creating second endpoint for communication, abort"));
 	}
-
-	/* A supprimer plus tard */
-	ft_putstr_col("Socket is now open: ", CYAN_COL);
-	ft_putnbr(sock);
-	ft_putchar('\n');
 	return (sock);
 }
+
+
 
 int			create_server(int port)
 {
