@@ -33,11 +33,6 @@ int			core_client(t_cts *cts)
 		ft_putstr("$> ");
 		get_next_line(0, &buf);
 		handle_input(buf, cts);
-		if (ft_strcmp("quit", buf) == 0)
-		{
-			ft_putendl("see ya");
-			break ;
-		}
 		ft_strdel(&buf);
 	}
 	ft_strdel(&buf);

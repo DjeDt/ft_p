@@ -12,15 +12,23 @@
 
 #include "server.h"
 
-int		ft_ls(char **argv, t_rfc *rfc)
+int		ft_ls(char **argv, t_rfc *server_pi)
 {
+	pid_t	father;
+
 	if (!argv)
 		return (-1);
-	ft_putendl("ls = ");
-	(void)rfc;
-	int count;
-	count = 0;
-	while (argv[count])
-		ft_putendl(argv[count++]);
+	father = fork();
+	if (father == 0)
+	{
+		dup2(server_pi->cli_sock, 0);
+		dup2(server_pi->cli_sock, 1);
+		execv("/bin/ls", argv);
+		ft_putstr_fd(argv[0], 2);
+		ft_putendl_fd(": not found", 2);
+		exit(0);
+	}
+	wait4(father, 0, 0, 0);
+	(void)server_pi;
 	return (0);
 }

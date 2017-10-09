@@ -15,6 +15,12 @@
 
 # include "main.h"
 
+# include <sys/types.h>
+# include <sys/time.h>
+# include <sys/resource.h>
+# include <sys/wait.h>
+
+
 # define PUT_USAGE "usage: put [fichier-local] -> [fichier-distant]\n\
 					[fichier-distant] est optionnel."
 

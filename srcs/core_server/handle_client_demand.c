@@ -12,11 +12,22 @@
 
 #include "server.h"
 
+int		modif_fd(int i)
+{
+	static int save;
+
+	if (i == 0)
+	{
+	dup2(save, STDIN_FILENO);
+	dup2(save, STDOUT_FILENO);
+	}
+	return (0);
+}
+
 int		exec_command(int sig, char **arg, t_rfc *server_pi, t_rfc *server_dtp)
 {
 	int ret;
 
-	ret = 0;
 	if (sig == SIG_CD)
 		ret = ft_cd(arg, server_pi);
 	else if (sig == SIG_LS)
@@ -37,14 +48,6 @@ int		bind_fd_and_exec(int sig, char *arg, t_rfc *server_pi, t_rfc *server_dtp)
 {
 	int		ret;
 	char	**command;
-
-	/* link output from builtin server to client */
-//	dup2(server_pi->socket, STDIN_FILENO);
-//	dup2(server_pi->socket, STDOUT_FILENO);
-//	dup2(server_pi->socket, STDERR_FILENO);
-
-//	close(0);
-//	dup2(server_pi->cli_sock, 0);
 
 	/* exec builtin */
 	if (!(command = ft_strsplit(arg, ' ')))
