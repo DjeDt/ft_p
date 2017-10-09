@@ -6,7 +6,7 @@
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/18 15:28:00 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/10/04 17:13:34 by ddinaut          ###   ########.fr       */
+/*   Updated: 2017/10/09 19:25:10 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,8 @@ typedef struct	s_cts
 typedef struct		s_builtin
 {
 	const char		*ft;
-	int				(*func)(const char *cmd, t_cts *cts);
+	int				(*func)(const char *arg, t_cts *cts);
 }					t_builtin;
-
-typedef struct	s_signal
-{
-	const char	*ft;
-	int			(*func)(char *buf, int socket);
-}				t_signal;
 
 int		init_client(char **argv, t_cts *client_pi, t_cts *client_dtp);
 int		create_client(t_cts *cts);
@@ -45,7 +39,7 @@ int		send_user_information(int socket);
 
 int		handle_input(const char *cmd, t_cts *cts);
 
-int		send_command_to_server(int s, const char *arg, t_cts *cts);
+int		send_command_to_server(const char *arg, t_cts *cts);
 int		ft_cd(const char *arg, t_cts *cts);
 int		ft_ls(const char *arg, t_cts *cts);
 int		ft_get(const char *arg, t_cts *cts);
@@ -54,3 +48,6 @@ int		ft_pwd(const char *arg, t_cts *cts);
 int		ft_quit(const char *arg, t_cts *cts);
 
 #endif
+
+
+

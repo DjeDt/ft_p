@@ -6,7 +6,7 @@
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/18 16:39:11 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/10/04 15:42:27 by ddinaut          ###   ########.fr       */
+/*   Updated: 2017/10/09 19:50:19 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,9 @@ int			core_client(t_cts *cts)
 	{
 		ft_putstr("$> ");
 		get_next_line(0, &buf);
-		handle_input(buf, cts);
+		statut = handle_input(buf, cts);
 		ft_strdel(&buf);
 	}
-	ft_strdel(&buf);
 	return (ret);
 }
 
@@ -51,10 +50,7 @@ int			main(int argc, char **argv)
 		return (-1);
 	if (create_client(&client_pi) == -1)
 		return (-1);
-
 	core_client(&client_pi);
-
-//	send_user_information(cts.sock);
 
 	close(client_pi.sock);
 	return (0);

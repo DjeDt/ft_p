@@ -1,9 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_cd.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/10/09 18:14:01 by ddinaut           #+#    #+#             */
+/*   Updated: 2017/10/09 18:14:45 by ddinaut          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "client.h"
 
 int		ft_cd(const char *arg, t_cts *cts)
 {
 	int ret;
 
-	ret = send_command_to_server(SIG_CD, arg, cts);
+	ret = 1;
+	(void)arg;
+	(void)cts;
 	return (ret);
 }

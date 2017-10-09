@@ -6,7 +6,7 @@
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/04 14:40:05 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/10/04 19:28:44 by ddinaut          ###   ########.fr       */
+/*   Updated: 2017/10/09 19:48:27 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 void	built_not_found(const char *cmd)
 {
-	ft_putendl_col_fd("error: ", 2, RED_COL);
-	ft_putendl_col_fd(cmd, 2, RED_COL);
-	ft_putendl_col_fd(": unknow command", 2, RED_COL);
+	ft_putstr_fd("error: ", 2);
+	ft_putstr_fd(cmd, 2);
+	ft_putendl_fd(": unknow command", 2);
 }
 
 int		ft_connect(const char *str, t_cts *connect)
@@ -45,48 +45,55 @@ void	init_builtin(t_builtin *built)
 	built[6].func = &ft_connect;
 }
 
-int		send_command_to_server(int s, const char *arg, t_cts *cts)
+int		send_command_to_server(const char *arg, t_cts *cts)
 {
-	int	ret;
-	int sig;
+	int			ret;
+	int			count;
+	char		*command;
+	t_builtin	builtin[8];
 
-	sig = s;
-	/* sending signal func */
-	if ((ret = send(cts->sock, &sig, sizeof(sig), 0)) < 0)
-	{
-		ft_putendl_col_fd("error when sending signal to server", 2, RED_COL);
+	ret = -1;
+	count = -1;
+	init_builtin(builtin);
+	command = ft_strndup(arg, ft_strnlen(arg, ' '));
+	if (!command)
 		return (-1);
-	}
-	/* sending full command to server */
-	if ((ret = send(cts->sock, arg, ft_strlen(arg), 0)) < 0)
+	while (++count < 7)
 	{
-		ft_putendl_col_fd("error when sending signal to server", 2, RED_COL);
-		return (-1);
+		if (ft_strcmp(command, builtin[count].ft) == 0)
+		{
+			if ((ret = send(cts->sock, arg, ft_strlen(arg), 0)) < 0)
+			{
+				ft_putendl_fd("error when sending command to server", 2);
+				return (-1);
+			}
+			ret = (builtin[count].func)(arg, cts);
+			break ;
+		}
 	}
+	if (count == 7)
+		built_not_found(command);
+	ft_strdel(&command);
 	return (0);
 }
 
 int		handle_input(const char *cmd, t_cts *cts)
 {
-	int			ret;
-	int			count;
-	char		*command;
-	t_builtin	builtin[7];
+	int	ret;
+	int	sig;
 
-	ret = -1;
-	count = -1;
-	init_builtin(builtin);
-	command = ft_strndup(cmd, ft_strnlen(cmd, ' '));
-	while (++count < 7 && command)
+	sig = CMD;
+	if ((ret = send(cts->sock, &sig, sizeof(sig), 0)) < 0)
 	{
-		if (ft_strcmp(command, builtin[count].ft)== 0)
-		{
-			ret = (builtin[count].func)(cmd, cts);
-			break ;
-		}
+		ft_putendl_col_fd("error when sending signal to server", 2, RED_COL);
+		return (1);
 	}
-	if (ret == -1)
-		built_not_found(command);
-	ft_strdel(&command);
+	if ((ret = recv(cts->sock, &sig, sizeof(int), 0)) < 0)
+	{
+		ft_putendl_col_fd("error when waiting for ready signal from server", 2, RED_COL);
+		return (1);
+	}
+	if (sig == READY)
+		ret = send_command_to_server(cmd, cts);
 	return (1);
 }

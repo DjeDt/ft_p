@@ -6,7 +6,7 @@
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/18 15:27:55 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/10/04 19:05:51 by ddinaut          ###   ########.fr       */
+/*   Updated: 2017/10/09 19:01:08 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,13 @@ typedef struct			s_user
 	struct s_user		*next;
 }						t_user;
 
+typedef struct			s_builtin
+{
+	const char			*ft;
+	int					(*func)(char **cmd, t_rfc *server_pi);
+}						t_builtin;
+
+
 # ifdef __APPLE__
 	# define USR_DTB "/Users/ddinaut/Dev/ft_p/.usr_database"
 # elif __linux
@@ -49,9 +56,7 @@ typedef struct			s_user
 int		init_connection_server(t_rfc *server_pi, t_rfc *server_dtp, char **argv);
 int		received_from_client(t_rfc *server_pi);
 int		waiting_for_client(t_rfc *server_pi, t_rfc *server_dtp);
-int		handle_client_demand(int signal, t_rfc *server_pi, t_rfc *server_dtp);
-
-/* Creating server */
+int		handle_client_demand(t_rfc *server_pi, t_rfc *server_dtp);
 
 /* Builtins */
 int		ft_cd(char **argv, t_rfc *rfc);
