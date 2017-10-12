@@ -22,16 +22,33 @@ static int	create_file(const char *file)
 	return (fd);
 }
 
-int			ft_put(char **cmd, t_rfc *rfc)
+int			ft_put(char **cmd, t_rfc *server)
 {
-	int sig;
-	int ret;
 	int fd;
+	int	count;
+	uint64_t test;
+	int ret;
 
-	sig = READY;
-	fd = create_file(cmd[1]);
-	(void)fd;
-	send(rfc->cli_sock, &sig, sizeof(sig), 0);
-	ret = 0;
+	count = ft_arrlen(cmd);
+	if (count == 3)
+		fd = create_file(cmd[2]);
+	else
+		fd = create_file(cmd[1]);
+	while (1)
+	{
+		ret = recv(server->cli_sock, &test, sizeof(test), 0);
+		if (ret == -1)
+		{
+			ft_putendl_fd("error when received data from client", 2);
+			return (-1);
+		}
+		if (write(fd, &test, sizeof(test)) < 0)
+		{
+			ft_putendl_fd("error when write data in specified file", 2);
+			return (-1);
+		}
+		if (ret == 0)
+			break ;
+	}
 	return (ret);
 }

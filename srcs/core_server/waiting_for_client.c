@@ -12,7 +12,7 @@
 
 #include "server.h"
 
-int		waiting_for_client(t_rfc *server_pi, t_rfc *server_dtp)
+int		waiting_for_client(t_rfc *server_pi)
 {
 	server_pi->cli_sock = accept(server_pi->socket,					  \
 							   (struct sockaddr *)&server_pi->cli_sock_in, \
@@ -24,6 +24,5 @@ int		waiting_for_client(t_rfc *server_pi, t_rfc *server_dtp)
 	}
 	else
 		ft_putendl_col("connection established with client", YELLOW_COL);
-	(void)server_dtp;
 	return (0);
 }

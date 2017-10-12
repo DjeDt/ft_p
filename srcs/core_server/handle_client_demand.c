@@ -12,10 +12,10 @@
 
 #include "server.h"
 
-int		ft_connect(char **arg, t_rfc *server_pi)
+int		ft_connect(char **arg, t_rfc *server)
 {
 	(void)arg;
-	(void)server_pi;
+	(void)server;
 	return (1);
 }
 
@@ -38,7 +38,7 @@ void    init_builtin(t_builtin *built)
 }
 
 int		exec_command(const char *arg, int (*func)(char **arg, t_rfc *test),\
-					 t_rfc *server_pi, t_rfc *server_dtp)
+					 t_rfc *server)
 {
 	int		ret;
 	char	**command;
@@ -46,20 +46,31 @@ int		exec_command(const char *arg, int (*func)(char **arg, t_rfc *test),\
 	command = ft_strsplit(arg, ' ');
 	if (!command)
 		return (0);
-	
-	dup2(server_pi->cli_sock, 0);
-	dup2(server_pi->cli_sock, 1);
-	dup2(server_pi->cli_sock, 2);
-	
-	ret = func(command, server_pi);
+
+	dup2(server->cli_sock, 0);
+	dup2(server->cli_sock, 1);
+	dup2(server->cli_sock, 2);
+
+	ret = func(command, server);
 	ft_arrfree(&command);
-	(void)server_dtp;
 	return (ret);
 }
 
-int		bind_fd_and_exec(const char *arg, t_rfc *server_pi, t_rfc *server_dtp)
+void	replace(char *src)
 {
-	int			ret;
+	int count;
+
+	count = 0;
+	while (src[count])
+	{
+		if (src[count] == '\r' || src[count] == '\n')
+			src[count] = '\0';
+		++count;
+	}
+}
+
+int		bind_fd_and_exec(char *arg, t_rfc *server)
+{
 	int			count;
 	char		*command;
 	t_builtin	builtin[7];
@@ -69,11 +80,12 @@ int		bind_fd_and_exec(const char *arg, t_rfc *server_pi, t_rfc *server_dtp)
 	command = ft_strndup(arg, ft_strnlen(arg, ' '));
 	if (command == NULL)
 		return (0);
+	replace(command);
 	while (++count < 7)
 	{
 		if (ft_strcmp(command, builtin[count].ft) == 0)
 		{
-			ret = exec_command(arg, builtin[count].func, server_pi, server_dtp);
+			exec_command(arg, builtin[count].func, server);
 			break ;
 		}
 	}
@@ -81,19 +93,19 @@ int		bind_fd_and_exec(const char *arg, t_rfc *server_pi, t_rfc *server_dtp)
 	return (1);
 }
 
-int		handle_client_demand(t_rfc *server_pi, t_rfc *server_dtp)
+int		handle_client_demand(t_rfc *server)
 {
 	int		ret;
 	int		sig;
-	char	arg[1024];
+	char	*arg;
 
 	sig = READY;
-	if ((ret = send(server_pi->cli_sock, &sig, sizeof(sig), 0)) < 0)
+	if ((ret = send(server->cli_sock, &sig, sizeof(sig), 0)) < 0)
 	{
 		ft_putendl_fd("error when sending signal to client", 2);
 		return (1);
 	}
-	if ((ret = recv(server_pi->cli_sock, arg, 1023, 0)) < 0)
+	if (!(arg = read_from_socket(server)))
 	{
 		ft_putendl_fd("error when received command from client", 2);
 		return (1);
@@ -101,7 +113,6 @@ int		handle_client_demand(t_rfc *server_pi, t_rfc *server_dtp)
 	arg[ret] = '\0';
 	ft_putstr("command received : ");
 	ft_putendl(arg);
-
-	ret = bind_fd_and_exec(arg, server_pi, server_dtp);
+	ret = bind_fd_and_exec(arg, server);
 	return (1);
 }

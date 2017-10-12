@@ -45,12 +45,33 @@ void	init_builtin(t_builtin *built)
 	built[6].func = &ft_connect;
 }
 
+int		send_2(const char *arg, int len, t_cts *cts)
+{
+	int		ret;
+	int		count;
+	char	pack[len + 2];
+
+	count = 0;
+	ft_strcpy(pack, arg);
+	ft_strcat(pack, "\r\n");
+	while (pack[count])
+	{
+		if ((ret = send(cts->sock, &pack[count], 1, 0)) < 0)
+		{
+			ft_putendl_fd("error when sending data to server", 2);
+			return (-1);
+		}
+		count++;
+	}
+	return (0);
+}
+
 int		send_command_to_server(const char *arg, t_cts *cts)
 {
 	int			ret;
 	int			count;
 	char		*command;
-	t_builtin	builtin[8];
+	t_builtin	builtin[7];
 
 	ret = -1;
 	count = -1;
@@ -62,11 +83,8 @@ int		send_command_to_server(const char *arg, t_cts *cts)
 	{
 		if (ft_strcmp(command, builtin[count].ft) == 0)
 		{
-			if ((ret = send(cts->sock, arg, ft_strlen(arg), 0)) < 0)
-			{
-				ft_putendl_fd("error when sending command to server", 2);
+			if ((ret = send_2(arg, ft_strlen(arg), cts)) < 0)
 				return (-1);
-			}
 			ret = (builtin[count].func)(arg, cts);
 			break ;
 		}

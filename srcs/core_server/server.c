@@ -20,7 +20,7 @@ static int	arg_error(const char *str)
 	return (-1);
 }
 
-int			do_something(t_rfc *server_pi, t_rfc *server_dtp)
+int			do_something(t_rfc *server_pi)
 {
 	int		statut;
 	int		ret;
@@ -32,7 +32,7 @@ int			do_something(t_rfc *server_pi, t_rfc *server_dtp)
 		if ((ret = recv(server_pi->cli_sock, &sig, sizeof(sig), 0)) == -1)
 			break ;
 		if (sig == CMD)
-			statut = handle_client_demand(server_pi, server_dtp);
+			statut = handle_client_demand(server_pi);
 		else
 			ft_putendl_fd("error: unknow signal received", 2);
 		if (statut == -1)
@@ -41,18 +41,18 @@ int			do_something(t_rfc *server_pi, t_rfc *server_dtp)
 	return (statut);
 }
 
-int			core_server(t_rfc *server_pi, t_rfc *server_dtp)
+int			core_server(t_rfc *server_pi)
 {
 	pid_t	father;
 
 	while (1)
 	{
-		if (waiting_for_client(server_pi , server_dtp) == -1)
+		if (waiting_for_client(server_pi) == -1)
 			return (-1);
 		if ((father = fork()) == 0)
 		{
 			close(server_pi->socket);
-			if (do_something(server_pi, server_dtp) == -1)
+			if (do_something(server_pi) == -1)
 				return (-1);
 			close(server_pi->cli_sock);
 		}
@@ -64,15 +64,13 @@ int			core_server(t_rfc *server_pi, t_rfc *server_dtp)
 
 int			main(int argc, char **argv)
 {
-	t_rfc	server_pi;
-	t_rfc	server_dtp;
+	t_rfc	server;
 
 	if (argc != 2)
 		return (arg_error(argv[0]));
-	if ((init_connection_server(&server_pi, &server_dtp, argv)) == -1)
+	if ((init_connection_server(&server, argv)) == -1)
 		return (-1);
-	core_server(&server_pi, &server_dtp);
-	close(server_pi.cli_sock);
-	close(server_dtp.cli_sock);
+	core_server(&server);
+	close(server.cli_sock);
 	return (0);
 }

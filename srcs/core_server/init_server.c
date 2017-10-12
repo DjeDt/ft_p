@@ -47,16 +47,13 @@ static int	create_server(const int port)
 	return (sock);
 }
 
-int			init_connection_server(t_rfc *server_pi, t_rfc *server_dtp, char **argv)
+int			init_connection_server(t_rfc *server_pi, char **argv)
 {
 	int	port;
 
 	port = ft_atoi(argv[1]);
 	server_pi->port = port;
 	if ((server_pi->socket = create_server(port)) == -1)
-		return (-1);
-	server_dtp->port = port + 1;
-	if ((server_dtp->socket = create_server(port + 1)) == -1)
 		return (-1);
 	return (0);
 }

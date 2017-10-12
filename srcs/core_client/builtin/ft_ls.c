@@ -15,16 +15,19 @@
 int		ft_ls(const char *arg, t_cts *cts)
 {
 	int		ret;
-	char	tmp[1024];
+	char	tmp[2];
 
 	(void)arg;
 	while (1)
 	{
-		if (!(ret = recv(cts->sock, tmp, 1023, 0)))
+		if ((ret = recv(cts->sock, tmp, 1, 0)) == -1)
+		{
+			ft_putendl_fd("error when received answer from server" , 2);
 			return (-1);
+		}
 		tmp[ret] = '\0';
-		ft_putstr(tmp);
-		if (ret == 1 && tmp[0] == '\0')
+		ft_putstr_fd(tmp, 1);
+		if (tmp[0] == '\0')
 			break ;
 	}
 	return (ret);

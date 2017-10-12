@@ -55,6 +55,7 @@ SRCS_SER 	= \
 			$(DIR_SER)init_server.c \
 			$(DIR_SER)waiting_for_client.c \
 			$(DIR_SER)handle_client_demand.c \
+			$(DIR_SER)read_from_socket.c \
 \
 			$(DIR_SER)$(BUILTIN)ft_cd.c \
 			$(DIR_SER)$(BUILTIN)ft_ls.c \

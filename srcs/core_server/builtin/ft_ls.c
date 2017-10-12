@@ -17,6 +17,7 @@ int		ft_ls(char **argv, t_rfc *server_pi)
 	int		statut;
 	pid_t	father;
 
+	statut = 1;
 	if (!argv)
 		return (-1);
 	if ((father = fork()) == 0)

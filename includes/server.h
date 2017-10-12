@@ -24,15 +24,6 @@
 # define PUT_USAGE "usage: put [fichier-local] -> [fichier-distant]\n\
 					[fichier-distant] est optionnel."
 
-typedef	struct			s_rfc
-{
-	int					port;
-	int					socket;
-	int					cli_sock;
-	unsigned int		cli_sock_len;
-	struct sockaddr_in	cli_sock_in;
-}						t_rfc;
-
 typedef struct			s_user
 {
 	char				username[1024];
@@ -40,12 +31,22 @@ typedef struct			s_user
 	struct s_user		*next;
 }						t_user;
 
+typedef	struct			s_rfc
+{
+	int					port;
+	int					socket;
+	int					socket_dtp;
+	int					cli_sock;
+	int					cli_sock_dtp;
+	unsigned int		cli_sock_len;
+	struct sockaddr_in	cli_sock_in;
+}						t_rfc;
+
 typedef struct			s_builtin
 {
 	const char			*ft;
-	int					(*func)(char **cmd, t_rfc *server_pi);
+	int					(*func)(char **cmd, t_rfc *server);
 }						t_builtin;
-
 
 # ifdef __APPLE__
 	# define USR_DTB "/Users/ddinaut/Dev/ft_p/.usr_database"
@@ -53,18 +54,20 @@ typedef struct			s_builtin
 	# define USR_DTB "/home/dje/Dev/ft_p/.usr_database"
 # endif
 
-int		init_connection_server(t_rfc *server_pi, t_rfc *server_dtp, char **argv);
-int		received_from_client(t_rfc *server_pi);
-int		waiting_for_client(t_rfc *server_pi, t_rfc *server_dtp);
-int		handle_client_demand(t_rfc *server_pi, t_rfc *server_dtp);
+int		init_connection_server(t_rfc *server, char **argv);
+int		received_from_client(t_rfc *server);
+int		waiting_for_client(t_rfc *server);
+int		handle_client_demand(t_rfc *server);
+
+char	*read_from_socket(t_rfc *server);
 
 /* Builtins */
-int		ft_cd(char **argv, t_rfc *rfc);
-int		ft_ls(char **argv, t_rfc *rfc);
-int		ft_get(char **argv, t_rfc *rfc);
-int		ft_put(char **argv, t_rfc *rfc);
-int		ft_pwd(char **argv, t_rfc *rfc);
-int		ft_quit(char **argv, t_rfc *rfc);
+int		ft_cd(char **argv, t_rfc *server);
+int		ft_ls(char **argv, t_rfc *server);
+int		ft_get(char **argv, t_rfc *server);
+int		ft_put(char **argv, t_rfc *server);
+int		ft_pwd(char **argv, t_rfc *server);
+int		ft_quit(char **argv, t_rfc *server);
 /* builtin connection */
 int		check_user_info(t_user user);
 t_user	*create_usr_dtb(const char *user, const char *mdp);
