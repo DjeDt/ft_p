@@ -6,7 +6,7 @@
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/04 16:20:29 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/10/09 18:16:22 by ddinaut          ###   ########.fr       */
+/*   Updated: 2017/10/12 20:26:45 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,9 @@ int			send_file_to_server(int fd, t_cts *cts)
 {
 	int		ret;
 	int		ret2;
-	uint64_t test;
+	int		test;
 
+	ft_putendl("send file to server");
 	while (1)
 	{
 		ret = read(fd, &test, 1);
@@ -65,7 +66,7 @@ int			send_file_to_server(int fd, t_cts *cts)
 		ret2 = send(cts->sock, &test, sizeof(test), 0);
 		if (ret2 == -1)
 		{
-			ft_putendl_fd("error when send data to server", 2);
+			ft_putendl_fd("error when sending data to server", 2);
 			return (-1);
 		}
 		if (ret == 0)
@@ -74,7 +75,7 @@ int			send_file_to_server(int fd, t_cts *cts)
 	return (0);
 }
 
-int			ft_put(const char *arg, t_cts *cts)
+int			ft_put(const char *arg, t_cts *client)
 {
 	int		fd;
 	int		len;
@@ -82,11 +83,12 @@ int			ft_put(const char *arg, t_cts *cts)
 
 	name = ft_strsplit(arg, ' ');
 	len = ft_arrlen(name);
+
 	if (put_error(len) == -1)
 		return (-1);
 	fd = open_file2(name[1]);
 	if (fd == -1)
 		return (-1);
-	send_file_to_server(fd, cts);
+	send_file_to_server(fd, client);
 	return (1);
 }

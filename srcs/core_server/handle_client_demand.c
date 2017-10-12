@@ -6,7 +6,7 @@
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/04 14:40:34 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/10/09 19:48:11 by ddinaut          ###   ########.fr       */
+/*   Updated: 2017/10/12 19:56:12 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,11 @@ int		exec_command(const char *arg, int (*func)(char **arg, t_rfc *test),\
 	command = ft_strsplit(arg, ' ');
 	if (!command)
 		return (0);
-
-	dup2(server->cli_sock, 0);
-	dup2(server->cli_sock, 1);
-	dup2(server->cli_sock, 2);
-
+	ft_putendl("exec command");
 	ret = func(command, server);
+	ft_putendl("command executed");
 	ft_arrfree(&command);
+
 	return (ret);
 }
 
@@ -80,7 +78,6 @@ int		bind_fd_and_exec(char *arg, t_rfc *server)
 	command = ft_strndup(arg, ft_strnlen(arg, ' '));
 	if (command == NULL)
 		return (0);
-	replace(command);
 	while (++count < 7)
 	{
 		if (ft_strcmp(command, builtin[count].ft) == 0)
@@ -110,9 +107,11 @@ int		handle_client_demand(t_rfc *server)
 		ft_putendl_fd("error when received command from client", 2);
 		return (1);
 	}
-	arg[ret] = '\0';
+	replace(arg);
+
 	ft_putstr("command received : ");
 	ft_putendl(arg);
+
 	ret = bind_fd_and_exec(arg, server);
 	return (1);
 }
