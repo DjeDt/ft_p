@@ -6,7 +6,7 @@
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/04 17:20:16 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/10/04 22:04:16 by ddinaut          ###   ########.fr       */
+/*   Updated: 2018/01/25 10:02:59 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,6 @@ int		ft_quit(char **cmd, t_rfc *rfc)
 {
 	(void)cmd;
 	(void)rfc;
-	ft_putendl("fonction quit");
-	return (0);
+	ft_putendl("client has quit");
+	return (-1);
 }

@@ -6,7 +6,7 @@
 #    By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/08/24 11:05:54 by ddinaut           #+#    #+#              #
-#    Updated: 2017/10/04 17:18:53 by ddinaut          ###   ########.fr        #
+#    Updated: 2018/01/25 10:07:35 by ddinaut          ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -17,6 +17,7 @@ CLIENT		= client
 # compilation #
 CC			= gcc
 FLAGS		= -Wall -Wextra -Werror
+DEBUG		= n
 ADDFLAGS	= #-O1 -g3 -fsanitize=address -fno-omit-frame-pointer
 
 # Directories #
@@ -97,6 +98,14 @@ SRCS_CLI	= \
 OBJ_CLI = $(SRC_CLI:$(SRC_PATH)/%.c=$(OBJ_PATH)/%.o)
 SRC_CLI = $(addprefix $(SRC_PATH)/,$(SRCS_CLI))
 
+# Percent Progress
+COUNT_S       	= 1
+COUNT_C       	= 1
+NB_FILES_SER	= $(words $(SRCS_SER))
+NB_FILES_CLI	= $(words $(SRCS_CLI))
+PERCENT_SER    	= $(shell echo $$(( ($(COUNT_S) * 100) / $(NB_FILES_SER))))
+PERCENT_CLI    	= $(shell echo $$(( ($(COUNT_C) * 100) / $(NB_FILES_CLI))))
+
 # Exceptions #
 .PHONY: all clean fclean re
 
@@ -104,26 +113,26 @@ SRC_CLI = $(addprefix $(SRC_PATH)/,$(SRCS_CLI))
 all: $(SERVEUR) $(CLIENT)
 
 $(SERVEUR): $(OBJ_SER)
-	@printf "Creating server\n"
 	@make -sC $(LIB_PATH)
 	@$(CC) -o $(SERVEUR) $(FLAGS) $(ADDFLAGS) $(OBJ_SER) $(LIBS)
-	@printf "Finished\n"
+	@printf "$(GREEN)\r\033[KServer is ready to works\n$(END_COL)"
 
 $(OBJ_SER): $(OBJ_PATH)/%.o : $(SRC_PATH)/%.c
 	@mkdir -p $(dir $@)
 	@$(CC) -o $@ $(FLAGS) $(ADDFLAGS) $(INCLUDES) -c $<
-	@printf "$(GREEN)%s -> %s                                \r$(END_COL)" $@ $<
+	@printf "\r\033[K$(RED)[%-5.2f%%]  \e[1;38;5;148m[$@] -> [$<]$(END_COL)" $(PERCENT_SER)
+	$(eval COUNT_S=$(shell echo $$(($(COUNT_S)+1))))
 
 $(CLIENT): $(OBJ_CLI)
-	@printf "Creating client\n"
 	@make -sC $(LIB_PATH)
 	@$(CC) -o $@ $(FLAGS) $(ADDFLAGS) $(OBJ_CLI) $(LIBS)
-	@printf "Finished\n"
+	@printf "$(GREEN)\r\033[KClient is ready to works\n$(END_COL)"
 
 $(OBJ_CLI): $(OBJ_PATH)/%.o : $(SRC_PATH)/%.c
 	@mkdir -p $(dir $@)
 	@$(CC) -o $@ $(FLAGS) $(ADD_FLAGS) $(INCLUDES) -c $<
-	@printf "$(GREEN)%s -> %s                                \r$(END_COL)" $@ $<
+	@printf "\r\033[K$(RED)[%-5.2f%%]  \e[1;38;5;148m[$@] -> [$<]$(END_COL)" $(PERCENT_CLI)
+	$(eval COUNT_C=$(shell echo $$(($(COUNT_C)+1))))
 
 clean:
 	@make -sC $(LIB_PATH) clean

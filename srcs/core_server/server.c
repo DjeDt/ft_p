@@ -6,7 +6,7 @@
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/18 15:50:52 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/10/09 19:00:08 by ddinaut          ###   ########.fr       */
+/*   Updated: 2018/01/25 09:57:55 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int			do_something(t_rfc *server_pi)
 	int		sig;
 
 	statut = 1;
-	while (statut)
+	while (statut >= 0)
 	{
 		if ((ret = recv(server_pi->cli_sock, &sig, sizeof(sig), 0)) == -1)
 			break ;
@@ -35,8 +35,6 @@ int			do_something(t_rfc *server_pi)
 			statut = handle_client_demand(server_pi);
 		else
 			ft_putendl_fd("error: unknow signal received", 2);
-		if (statut == -1)
-			break ;
 	}
 	return (statut);
 }

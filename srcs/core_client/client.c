@@ -6,7 +6,7 @@
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/18 16:39:11 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/10/09 19:50:19 by ddinaut          ###   ########.fr       */
+/*   Updated: 2018/01/25 10:18:15 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int			core_client(t_cts *cts)
 
 	ret = 1;
 	statut = 1;
-	while (statut)
+	while (statut >= 0)
 	{
 		ft_putstr("$> ");
 		get_next_line(0, &buf);
@@ -51,7 +51,6 @@ int			main(int argc, char **argv)
 	if (create_client(&client_pi) == -1)
 		return (-1);
 	core_client(&client_pi);
-
 	close(client_pi.sock);
 	return (0);
 }

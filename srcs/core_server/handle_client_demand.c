@@ -6,7 +6,7 @@
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/04 14:40:34 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/10/12 19:56:12 by ddinaut          ###   ########.fr       */
+/*   Updated: 2018/01/25 10:16:50 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ int		exec_command(const char *arg, int (*func)(char **arg, t_rfc *test),\
 	ret = func(command, server);
 	ft_putendl("command executed");
 	ft_arrfree(&command);
-
 	return (ret);
 }
 
@@ -70,10 +69,12 @@ void	replace(char *src)
 int		bind_fd_and_exec(char *arg, t_rfc *server)
 {
 	int			count;
+	int			ret;
 	char		*command;
 	t_builtin	builtin[7];
 
 	count = -1;
+	ret = 1;
 	init_builtin(builtin);
 	command = ft_strndup(arg, ft_strnlen(arg, ' '));
 	if (command == NULL)
@@ -82,12 +83,12 @@ int		bind_fd_and_exec(char *arg, t_rfc *server)
 	{
 		if (ft_strcmp(command, builtin[count].ft) == 0)
 		{
-			exec_command(arg, builtin[count].func, server);
+			ret = exec_command(arg, builtin[count].func, server);
 			break ;
 		}
 	}
 	ft_strdel(&command);
-	return (1);
+	return (ret);
 }
 
 int		handle_client_demand(t_rfc *server)
@@ -113,5 +114,5 @@ int		handle_client_demand(t_rfc *server)
 	ft_putendl(arg);
 
 	ret = bind_fd_and_exec(arg, server);
-	return (1);
+	return (ret);
 }

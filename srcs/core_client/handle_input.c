@@ -6,7 +6,7 @@
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/04 14:40:05 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/10/12 19:33:54 by ddinaut          ###   ########.fr       */
+/*   Updated: 2018/01/25 10:17:38 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ int		send_2(const char *arg, int len, t_cts *cts)
 	count = 0;
 	ft_strcpy(pack, arg);
 	ft_strcat(pack, "\r\n");
-	ft_putendl("sending command to server");
 	while (pack[count])
 	{
 		if ((ret = send(cts->sock, &pack[count], 1, 0)) < 0)
@@ -75,28 +74,29 @@ int		send_command_to_server(const char *arg, t_cts *cts)
 	char		*command;
 	t_builtin	builtin[7];
 
-	ret = -1;
+	ret = 0;
 	count = -1;
 	init_builtin(builtin);
 	command = ft_strndup(arg, ft_strnlen(arg, ' '));
 	if (!command)
 		return (-1);
-	ft_putendl("looking for builtin");
 	while (++count < 7)
 	{
 		if (ft_strcmp(command, builtin[count].ft) == 0)
 		{
 			if ((ret = send_2(arg, ft_strlen(arg), cts)) < 0)
 				return (-1);
-			ft_putendl("begin builtin");
 			ret = (builtin[count].func)(arg, cts);
 			break ;
 		}
 	}
-	if (count == 7)
-		built_not_found(command);
 	ft_strdel(&command);
-	return (0);
+	if (count == 7)
+	{
+		built_not_found(command);
+		return (0);
+	}
+	return (ret);
 }
 
 int		handle_input(const char *cmd, t_cts *cts)
@@ -105,13 +105,11 @@ int		handle_input(const char *cmd, t_cts *cts)
 	int	sig;
 
 	sig = CMD;
-	ft_putendl("sending cmd signal");
 	if ((ret = send(cts->sock, &sig, sizeof(sig), 0)) < 0)
 	{
 		ft_putendl_col_fd("error when sending signal to server", 2, RED_COL);
 		return (1);
 	}
-	ft_putendl("waiting for server response");
 	if ((ret = recv(cts->sock, &sig, sizeof(int), 0)) < 0)
 	{
 		ft_putendl_col_fd("error when waiting for ready signal from server", 2, RED_COL);
@@ -119,5 +117,5 @@ int		handle_input(const char *cmd, t_cts *cts)
 	}
 	if (sig == READY)
 		ret = send_command_to_server(cmd, cts);
-	return (1);
+	return (ret);
 }

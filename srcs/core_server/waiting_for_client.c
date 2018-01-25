@@ -6,7 +6,7 @@
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/20 21:25:21 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/09/20 21:44:34 by ddinaut          ###   ########.fr       */
+/*   Updated: 2018/01/25 09:20:40 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,7 @@
 
 int		waiting_for_client(t_rfc *server_pi)
 {
-	server_pi->cli_sock = accept(server_pi->socket,					  \
-							   (struct sockaddr *)&server_pi->cli_sock_in, \
-							   &server_pi->cli_sock_len);
+	server_pi->cli_sock = accept(server_pi->socket, (struct sockaddr*)&server_pi->cli_sock_in, &server_pi->cli_sock_len);
     if (server_pi->cli_sock == -1)
 	{
 		ft_putendl_col_fd("connection error, try again", 2, RED_COL);

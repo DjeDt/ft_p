@@ -6,7 +6,7 @@
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/04 16:24:38 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/10/09 18:17:12 by ddinaut          ###   ########.fr       */
+/*   Updated: 2018/01/25 10:37:24 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,8 @@
 
 int		ft_quit(const char *arg, t_cts *cts)
 {
-	int ret;
-
-	ret = 1;
+	ft_putendl("exit.");
 	(void)arg;
 	(void)cts;
-	return (ret);
+	return (-1);
 }

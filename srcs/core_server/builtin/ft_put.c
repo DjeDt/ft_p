@@ -6,7 +6,7 @@
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/04 17:17:19 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/10/12 20:25:27 by ddinaut          ###   ########.fr       */
+/*   Updated: 2018/01/25 10:49:51 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 
 static int	create_file(const char *file)
 {
-	int fd;
+	int		fd;
 	char	*path;
 
 	path = ft_strjoin("/tmp/", file);
-
 	ft_putstr("file created = ");
 	ft_putendl(path);
+
 	fd = open(path, O_TRUNC | O_RDWR | O_CREAT, 0660);
 	if (fd == -1)
 		ft_putendl("error when creating file");
@@ -31,24 +31,18 @@ int			write_in_file(int fd, t_rfc *server)
 {
 	int test;
 	int ret;
-	
-	while (1)
+
+	ret = 1;
+	while (ret)
 	{
 		if ((ret = recv(server->cli_sock, &test, sizeof(test), 0)) < 0)
 		{
 			ft_putendl_fd("error when received data from client", 2);
-			return (-1);
+			break ;
 		}
 		if (write(fd, &test, sizeof(test)) < 0)
 		{
 			ft_putendl_fd("error when write data in specified file", 2);
-			return (-1);
-		}
-		else
-			ft_putendl("write in file");
-		if (ret == -1)
-		{
-			ft_putendl("break");
 			break ;
 		}
 	}
@@ -67,5 +61,6 @@ int			ft_put(char **cmd, t_rfc *server)
 	else
 		fd = create_file(cmd[1]);
 	ret = write_in_file(fd, server);
+	close(fd);
 	return (ret);
 }

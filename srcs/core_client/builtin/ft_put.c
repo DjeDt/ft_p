@@ -6,7 +6,7 @@
 /*   By: ddinaut <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/04 16:20:29 by ddinaut           #+#    #+#             */
-/*   Updated: 2017/10/12 20:26:45 by ddinaut          ###   ########.fr       */
+/*   Updated: 2018/01/25 10:11:29 by ddinaut          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,15 @@ int		put_error(int len)
 	{
 		ft_putendl_fd("error: put: missing file !", 2);
 		ft_putendl_fd("type [help put] for usage.", 2);
+		return (-1);
 	}
 	else if (len == 4)
 	{
 		ft_putendl_fd("error: put: too much arguments !", 2);
 		ft_putendl_fd("type [help put] for usage.", 2);
+		return (-1);
 	}
-	else
-		return (0);
-	return (-1);
+	return (0);
 }
 
 int		open_file2(const char *path)
@@ -48,7 +48,7 @@ int		open_file2(const char *path)
 	return (-1);
 }
 
-int			send_file_to_server(int fd, t_cts *cts)
+int		send_file_to_server(int fd, t_cts *cts)
 {
 	int		ret;
 	int		ret2;
@@ -72,7 +72,7 @@ int			send_file_to_server(int fd, t_cts *cts)
 		if (ret == 0)
 			break ;
 	}
-	return (0);
+	return (ret);
 }
 
 int			ft_put(const char *arg, t_cts *client)
@@ -83,12 +83,10 @@ int			ft_put(const char *arg, t_cts *client)
 
 	name = ft_strsplit(arg, ' ');
 	len = ft_arrlen(name);
-
 	if (put_error(len) == -1)
-		return (-1);
-	fd = open_file2(name[1]);
-	if (fd == -1)
-		return (-1);
+		return (0);
+	if (!(fd = open_file2(name[1])))
+		return (0);
 	send_file_to_server(fd, client);
 	return (1);
 }
